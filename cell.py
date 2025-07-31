@@ -45,3 +45,9 @@ class Cell():
             self.__win.draw_line(Line(p3, p4))
         if self.has_left_wall:
             self.__win.draw_line(Line(p4, p1))
+
+    def draw_move(self, to_cell, undo=False):
+        center1 = Point(self.__x1 + (self.__x2 - self.__x1)/2, self.__y1 + (self.__y2 - self.__y1)/2)
+        center2 = Point(to_cell.__x1 + (to_cell.__x2 - to_cell.__x1)/2, to_cell.__y1 + (to_cell.__y2 - to_cell.__y1)/2)
+        color = "red" if not undo else "grey"
+        self.__win.draw_line(Line(center1, center2), color)
