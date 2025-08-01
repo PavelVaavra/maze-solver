@@ -1,12 +1,10 @@
 from cell import Cell
 from window import Window
+from maze import Maze
 
 def main():
     win = Window(800, 600)
-    c1, c2 = Cell(win), Cell(win)
-    c1.draw(20, 30)
-    c2.draw(500, 300)
-    c1.draw_move(c2, True)
+    m = Maze(40, 40, 13, 18, win)
     win.wait_for_close()
 
 if __name__ == "__main__":
