@@ -8,7 +8,7 @@ class Maze():
         y1,
         num_rows,
         num_cols,
-        win,
+        win=None,
         cell_size_x=40,
         cell_size_y=40
     ):
@@ -24,9 +24,11 @@ class Maze():
 
     def __create_cells(self):
         self.__cells = [[Cell(self.__win) for i in range(self.__num_rows)] for j in range(self.__num_cols)]
-        for i in range(self.__num_cols):
-            for j in range(self.__num_rows):
-                self.__draw_cell(i, j)
+        if self.__win:
+            for i in range(self.__num_cols):
+                for j in range(self.__num_rows):
+                    self.__draw_cell(i, j)
+        self.__break_entrance_and_exit()
 
     def __draw_cell(self, i, j):
         self.__cells[i][j].draw(self.__x1 + i * self.__cell_size_x, 
@@ -37,4 +39,10 @@ class Maze():
 
     def __animate(self):
         self.__win.redraw()
-        sleep(.01)
+        sleep(.001)
+
+    def __break_entrance_and_exit(self):
+        self.__cells[0][0].has_top_wall = False
+        self.__draw_cell(0, 0)
+        self.__cells[self.__num_cols - 1][self.__num_rows - 1].has_bottom_wall = False
+        self.__draw_cell(self.__num_cols - 1, self.__num_rows - 1)
