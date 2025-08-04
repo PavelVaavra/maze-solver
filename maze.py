@@ -45,7 +45,7 @@ class Maze():
 
     def __animate(self):
         self.__win.redraw()
-        sleep(.1)
+        sleep(.01)
 
     def __break_entrance_and_exit(self):
         self.__cells[0][0].has_top_wall = False
@@ -105,3 +105,53 @@ class Maze():
         for i in range(self.__num_cols):
             for j in range(self.__num_rows):
                 self.__cells[i][j].visited = False
+
+    def solve(self):
+        return self.__solve_r(0, 0)
+    
+    def __solve_r(self, i, j):
+        self.__animate()
+        self.__cells[i][j].visited = True
+        if i == self.__num_cols - 1 and j == self.__num_rows - 1:
+            return True
+        # adjacent to the left of the current cell
+        if 0 <= i - 1:
+            if not self.__cells[i - 1][j].visited:
+                if not self.__cells[i][j].has_left_wall and \
+                    not self.__cells[i - 1][j].has_right_wall:
+                    self.__cells[i][j].draw_move(self.__cells[i - 1][j])
+                    if self.__solve_r(i - 1, j):
+                        return True
+                    else:
+                        self.__cells[i][j].draw_move(self.__cells[i - 1][j], True)
+        # adjacent to the right of the current cell
+        if i + 1 < self.__num_cols:
+            if not self.__cells[i + 1][j].visited:
+                if not self.__cells[i][j].has_right_wall and \
+                    not self.__cells[i + 1][j].has_left_wall:
+                    self.__cells[i][j].draw_move(self.__cells[i + 1][j])
+                    if self.__solve_r(i + 1, j):
+                        return True
+                    else:
+                        self.__cells[i][j].draw_move(self.__cells[i + 1][j], True)
+        # adjacent on the top of the current cell
+        if 0 <= j - 1:
+            if not self.__cells[i][j - 1].visited:
+                if not self.__cells[i][j].has_top_wall and \
+                    not self.__cells[i][j - 1].has_bottom_wall:
+                    self.__cells[i][j].draw_move(self.__cells[i][j - 1])
+                    if self.__solve_r(i, j - 1):
+                        return True
+                    else:
+                        self.__cells[i][j].draw_move(self.__cells[i][j - 1], True)
+        # adjacent under the bottom of the current cell
+        if j + 1 < self.__num_rows:
+            if not self.__cells[i][j + 1].visited:
+                if not self.__cells[i][j].has_bottom_wall and \
+                    not self.__cells[i][j + 1].has_top_wall:
+                    self.__cells[i][j].draw_move(self.__cells[i][j + 1])
+                    if self.__solve_r(i, j + 1):
+                        return True
+                    else:
+                        self.__cells[i][j].draw_move(self.__cells[i][j + 1], True)
+        return False
