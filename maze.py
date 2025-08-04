@@ -27,6 +27,7 @@ class Maze():
         self.__create_cells()
         self.__break_entrance_and_exit()
         self.__break_walls_r(0, 0)
+        self.__reset_cells_visited()
 
     def __create_cells(self):
         self.__cells = [[Cell(self.__win) for i in range(self.__num_rows)] for j in range(self.__num_cols)]
@@ -44,7 +45,7 @@ class Maze():
 
     def __animate(self):
         self.__win.redraw()
-        sleep(.001)
+        sleep(.1)
 
     def __break_entrance_and_exit(self):
         self.__cells[0][0].has_top_wall = False
@@ -74,7 +75,8 @@ class Maze():
                 if not self.__cells[i][j + 1].visited:
                     possible_directions.append((i, j + 1))
             if len(possible_directions) == 0:
-                self.__draw_cell(i, j)
+                if self.__win:
+                    self.__draw_cell(i, j)
                 return
             i_new, j_new = possible_directions[random.randrange(len(possible_directions))]
             # same column
@@ -97,6 +99,9 @@ class Maze():
                 else:
                     self.__cells[i][j].has_left_wall = False
                     self.__cells[i_new][j_new].has_right_wall = False
-            self.__draw_cell(i, j)
-            self.__draw_cell(i_new, j_new)
             self.__break_walls_r(i_new, j_new)
+
+    def __reset_cells_visited(self):
+        for i in range(self.__num_cols):
+            for j in range(self.__num_rows):
+                self.__cells[i][j].visited = False
