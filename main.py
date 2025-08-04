@@ -7,7 +7,7 @@ def main():
     num_rows = 13
     num_cols = 18
     win = Window((num_cols + 2) * cell_size, (num_rows + 2) * cell_size)
-    m = Maze(cell_size, cell_size, num_rows, num_cols, win, cell_size, cell_size)
+    m = Maze(cell_size, cell_size, num_rows, num_cols, win, cell_size, cell_size, 0)
     win.wait_for_close()
 
 if __name__ == "__main__":
